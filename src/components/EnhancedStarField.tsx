@@ -128,9 +128,9 @@ export const EnhancedStarField: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 -z-10 transition-opacity duration-500"
+      className="fixed inset-0 -z-20 transition-opacity duration-500"
       style={{ 
-        background: 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
+        background: 'transparent',
         opacity: isHovered ? 1 : 0.8
       }}
     />

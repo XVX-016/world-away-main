@@ -8,7 +8,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
   return (
     <section className="min-h-screen flex flex-col justify-center items-center relative px-6">
-      <div className="text-center max-w-4xl mx-auto">
+      <div className="text-center max-w-4xl mx-auto bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-10 shadow-2xl shadow-black/40">
         {/* NASA Logo Placeholder */}
         <div className="mb-8 flex justify-center">
           <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4">

@@ -170,7 +170,7 @@ export const AdvancedSolarCarousel: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Enhanced Starfield Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/30 via-purple-900/20 to-black">
+      <div className="absolute inset-0">
         {/* Animated Stars */}
         {Array.from({ length: 150 }).map((_, i) => (
           <div
