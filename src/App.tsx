@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { EnhancedStarField } from './components/EnhancedStarField';
-import { SimpleSolarSystem } from './components/SimpleSolarSystem';
+import { AdvancedSolarCarousel } from './components/AdvancedSolarCarousel';
 import { Hero } from './components/Hero';
 import { DemoSection } from './components/DemoSection';
 import { ExoplanetDiscoverySection } from './components/ExoplanetDiscoverySection';
@@ -21,8 +21,8 @@ function App() {
       {/* Enhanced Interactive Star Background */}
       <EnhancedStarField />
       
-      {/* Simple Solar System */}
-      <SimpleSolarSystem />
+      {/* Advanced Solar System Carousel */}
+      <AdvancedSolarCarousel />
       
       {/* Main Content */}
       <main className="relative z-10 bg-transparent">
