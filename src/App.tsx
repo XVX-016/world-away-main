@@ -1,7 +1,9 @@
 import React, { useRef } from 'react';
-import { StarField } from './components/StarField';
+import { EnhancedStarField } from './components/EnhancedStarField';
+import { SolarSystem } from './components/SolarSystem';
 import { Hero } from './components/Hero';
 import { DemoSection } from './components/DemoSection';
+import { ExoplanetDiscoverySection } from './components/ExoplanetDiscoverySection';
 import { Footer } from './components/Footer';
 
 function App() {
@@ -13,8 +15,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Animated Star Background */}
-      <StarField />
+      {/* Enhanced Interactive Star Background */}
+      <EnhancedStarField />
+      
+      {/* 3D Solar System */}
+      <SolarSystem />
       
       {/* Main Content */}
       <main className="relative z-10">
@@ -25,6 +30,9 @@ function App() {
         <div ref={demoRef}>
           <DemoSection />
         </div>
+        
+        {/* Exoplanet Discovery Section */}
+        <ExoplanetDiscoverySection />
       </main>
       
       {/* Footer */}
