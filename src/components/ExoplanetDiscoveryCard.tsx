@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Planet, Star, Zap, TrendingUp, Eye, Target, Brain } from 'lucide-react';
 
 interface ExoplanetData {
