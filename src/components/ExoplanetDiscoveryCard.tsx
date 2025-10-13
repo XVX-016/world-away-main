@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Planet, Star, Zap, TrendingUp, Eye, Target, Brain } from 'lucide-react';
+import { Globe, Star, Zap, TrendingUp, Eye, Target, Brain } from 'lucide-react';
 
 interface ExoplanetData {
   id: string;
@@ -54,7 +54,7 @@ export const ExoplanetDiscoveryCard: React.FC<ExoplanetDiscoveryCardProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <Planet className="w-6 h-6 text-white" />
+            <Globe className="w-6 h-6 text-white" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-white">{exoplanet.name}</h3>
