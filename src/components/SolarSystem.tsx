@@ -121,101 +121,104 @@ export const SolarSystem: React.FC = () => {
 
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
-      <Canvas
-        camera={{ position: [0, 5, 15], fov: 60 }}
-        style={{ background: 'transparent' }}
-      >
-        <ambientLight intensity={0.2} />
-        <pointLight position={[0, 0, 0]} intensity={1} color="#FFD700" />
-        
-        {/* Sun */}
-        <Sun />
-        
-        {/* Orbit Rings */}
-        <OrbitRing radius={3} color="#4A90E2" />
-        <OrbitRing radius={5} color="#7B68EE" />
-        <OrbitRing radius={7} color="#32CD32" />
-        <OrbitRing radius={9} color="#FF6347" />
-        <OrbitRing radius={12} color="#FFD700" />
-        <OrbitRing radius={15} color="#87CEEB" />
-        <OrbitRing radius={18} color="#4169E1" />
-        <OrbitRing radius={21} color="#1E90FF" />
-        
-        {/* Planets */}
-        <Planet
-          position={[3, 0, 0]}
-          radius={0.2}
-          color="#8C7853"
-          speed={0.02}
-          name="Mercury"
-          orbitRadius={3}
-        />
-        <Planet
-          position={[5, 0, 0]}
-          radius={0.3}
-          color="#FFC649"
-          speed={0.015}
-          name="Venus"
-          orbitRadius={5}
-        />
-        <Planet
-          position={[7, 0, 0]}
-          radius={0.4}
-          color="#6B93D6"
-          speed={0.01}
-          name="Earth"
-          orbitRadius={7}
-        />
-        <Planet
-          position={[9, 0, 0]}
-          radius={0.3}
-          color="#C1440E"
-          speed={0.008}
-          name="Mars"
-          orbitRadius={9}
-        />
-        <Planet
-          position={[12, 0, 0]}
-          radius={0.8}
-          color="#D8CA9D"
-          speed={0.005}
-          name="Jupiter"
-          orbitRadius={12}
-        />
-        <Planet
-          position={[15, 0, 0]}
-          radius={0.7}
-          color="#FAD5A5"
-          speed={0.004}
-          name="Saturn"
-          orbitRadius={15}
-        />
-        <Planet
-          position={[18, 0, 0]}
-          radius={0.5}
-          color="#4FD0E7"
-          speed={0.003}
-          name="Uranus"
-          orbitRadius={18}
-        />
-        <Planet
-          position={[21, 0, 0]}
-          radius={0.5}
-          color="#4B70DD"
-          speed={0.002}
-          name="Neptune"
-          orbitRadius={21}
-        />
-        
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={0.5}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 2}
-        />
-      </Canvas>
+      <Suspense fallback={<div className="w-full h-full bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />}>
+        <Canvas
+          camera={{ position: [0, 5, 15], fov: 60 }}
+          style={{ background: 'transparent' }}
+          gl={{ antialias: false, alpha: true }}
+        >
+          <ambientLight intensity={0.2} />
+          <pointLight position={[0, 0, 0]} intensity={1} color="#FFD700" />
+          
+          {/* Sun */}
+          <Sun />
+          
+          {/* Orbit Rings */}
+          <OrbitRing radius={3} color="#4A90E2" />
+          <OrbitRing radius={5} color="#7B68EE" />
+          <OrbitRing radius={7} color="#32CD32" />
+          <OrbitRing radius={9} color="#FF6347" />
+          <OrbitRing radius={12} color="#FFD700" />
+          <OrbitRing radius={15} color="#87CEEB" />
+          <OrbitRing radius={18} color="#4169E1" />
+          <OrbitRing radius={21} color="#1E90FF" />
+          
+          {/* Planets */}
+          <Planet
+            position={[3, 0, 0]}
+            radius={0.2}
+            color="#8C7853"
+            speed={0.02}
+            name="Mercury"
+            orbitRadius={3}
+          />
+          <Planet
+            position={[5, 0, 0]}
+            radius={0.3}
+            color="#FFC649"
+            speed={0.015}
+            name="Venus"
+            orbitRadius={5}
+          />
+          <Planet
+            position={[7, 0, 0]}
+            radius={0.4}
+            color="#6B93D6"
+            speed={0.01}
+            name="Earth"
+            orbitRadius={7}
+          />
+          <Planet
+            position={[9, 0, 0]}
+            radius={0.3}
+            color="#C1440E"
+            speed={0.008}
+            name="Mars"
+            orbitRadius={9}
+          />
+          <Planet
+            position={[12, 0, 0]}
+            radius={0.8}
+            color="#D8CA9D"
+            speed={0.005}
+            name="Jupiter"
+            orbitRadius={12}
+          />
+          <Planet
+            position={[15, 0, 0]}
+            radius={0.7}
+            color="#FAD5A5"
+            speed={0.004}
+            name="Saturn"
+            orbitRadius={15}
+          />
+          <Planet
+            position={[18, 0, 0]}
+            radius={0.5}
+            color="#4FD0E7"
+            speed={0.003}
+            name="Uranus"
+            orbitRadius={18}
+          />
+          <Planet
+            position={[21, 0, 0]}
+            radius={0.5}
+            color="#4B70DD"
+            speed={0.002}
+            name="Neptune"
+            orbitRadius={21}
+          />
+          
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            autoRotate
+            autoRotateSpeed={0.5}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={Math.PI / 2}
+          />
+        </Canvas>
+      </Suspense>
     </div>
   );
 };
