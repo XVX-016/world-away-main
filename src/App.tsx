@@ -15,6 +15,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Fallback Background */}
+      <div className="fixed inset-0 bg-gradient-to-b from-blue-900/30 via-purple-900/20 to-black -z-20" />
+      
       {/* Enhanced Interactive Star Background */}
       <EnhancedStarField />
       
@@ -22,7 +25,7 @@ function App() {
       <SolarSystem />
       
       {/* Main Content */}
-      <main className="relative z-10">
+      <main className="relative z-10 bg-transparent">
         {/* Hero Section */}
         <Hero onExploreClick={scrollToDemo} />
         

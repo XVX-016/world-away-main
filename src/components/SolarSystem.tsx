@@ -109,11 +109,15 @@ export const SolarSystem: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 1000);
+    const timer = setTimeout(() => setIsVisible(true), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  if (!isVisible) return null;
+  if (!isVisible) {
+    return (
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-black" />
+    );
+  }
 
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
