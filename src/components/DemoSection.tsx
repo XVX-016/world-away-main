@@ -4,7 +4,7 @@ import { FileUpload } from './FileUpload';
 import { LightCurveChart } from './LightCurveChart';
 import { ModelOutput } from './ModelOutput';
 import { FeatureImportance } from './FeatureImportance';
-import { MLModelTraining } from './MLModelTraining';
+import { RealMLTraining } from './RealMLTraining';
 
 export interface LightCurveData {
   time: number;
@@ -68,8 +68,8 @@ export const DemoSection: React.FC = () => {
               <FileUpload onDataLoad={handleDataUpload} />
             </div>
 
-            {/* ML Model Training */}
-            <MLModelTraining />
+            {/* Real ML Model Training */}
+            <RealMLTraining />
 
             {/* Model Status */}
             {(isAnalyzing || analysis) && (
