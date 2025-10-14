@@ -169,8 +169,8 @@ export const AdvancedSolarCarousel: React.FC = () => {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Enhanced Starfield Background */}
-      <div className="absolute inset-0">
+      {/* Clean Starfield Background */}
+      <div className="absolute inset-0 bg-black">
         {/* Animated Stars */}
         {Array.from({ length: 150 }).map((_, i) => (
           <div
@@ -182,20 +182,6 @@ export const AdvancedSolarCarousel: React.FC = () => {
               animationDelay: `${Math.random() * 3}s`,
               animationDuration: `${2 + Math.random() * 3}s`,
               opacity: Math.random() * 0.8 + 0.2
-            }}
-          />
-        ))}
-        
-        {/* Shooting Stars */}
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={`shooting-${i}`}
-            className="absolute w-1 h-1 bg-blue-400 rounded-full animate-ping"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: '2s'
             }}
           />
         ))}
@@ -336,7 +322,7 @@ export const AdvancedSolarCarousel: React.FC = () => {
 
             <button
               onClick={togglePlayPause}
-              className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-full transition-all duration-300 transform hover:scale-110"
+              className="p-4 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
             >
               {isPlaying ? (
                 <Pause className="w-6 h-6 text-white" />
@@ -375,7 +361,7 @@ export const AdvancedSolarCarousel: React.FC = () => {
                 onClick={() => setCurrentIndex(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? 'bg-blue-500 scale-125'
+                    ? 'bg-white scale-125'
                     : 'bg-white/30 hover:bg-white/50'
                 }`}
               />

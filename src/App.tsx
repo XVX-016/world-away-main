@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import { EnhancedStarField } from './components/EnhancedStarField';
+import { useRef } from 'react';
 import { AdvancedSolarCarousel } from './components/AdvancedSolarCarousel';
 import { Hero } from './components/Hero';
 import { DemoSection } from './components/DemoSection';
@@ -16,7 +15,6 @@ function App() {
   return (
     <div className="min-h-screen text-white overflow-x-hidden">
       {/* Background layers */}
-      <EnhancedStarField />
       <AdvancedSolarCarousel />
 
       {/* Main Content */}
