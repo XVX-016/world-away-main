@@ -228,7 +228,7 @@ const SimpleInteractiveSolarSystem: React.FC<SimpleInteractiveSolarSystemProps> 
       canvas.removeEventListener('click', handleClick);
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [currentPlanet, onPlanetSelect, mousePos, time]);
+  }, [currentPlanet, onPlanetSelect, mousePos]);
 
   return (
     <canvas
