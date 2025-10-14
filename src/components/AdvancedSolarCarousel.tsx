@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause, RotateCcw, Info, Star } from 'lucide-react';
-import InteractiveStarfield from './EnhancedStarField3D';
 import InteractiveSolarSystem from './InteractiveSolarSystem';
 
 interface Planet {
@@ -171,9 +170,22 @@ export const AdvancedSolarCarousel: React.FC = () => {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Interactive 3D Starfield */}
-      <div className="absolute inset-0">
-        <InteractiveStarfield />
+      {/* Enhanced Starfield Background */}
+      <div className="absolute inset-0 bg-black">
+        {/* Dense Animated Stars */}
+        {Array.from({ length: 2000 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 3}s`,
+              opacity: Math.random() * 0.8 + 0.2
+            }}
+          />
+        ))}
       </div>
 
       {/* Interactive 3D Solar System */}
