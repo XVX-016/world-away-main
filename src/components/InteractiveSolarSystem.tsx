@@ -208,54 +208,59 @@ const InteractiveSolarSystem: React.FC<InteractiveSolarSystemProps> = ({
   ];
 
   return (
-    <Canvas camera={{ position: [0, 5, 15], fov: 60 }}>
-      <ambientLight intensity={0.2} />
-      <pointLight position={[0, 0, 0]} intensity={1} color="#FFD700" />
-      
-      <Sun />
-      
-      {/* Orbit Rings */}
-      {planets.map((planet, index) => (
-        <OrbitRing 
-          key={`orbit-${index}`} 
-          radius={planet.distance * 2} 
-          color="#FFFFFF" 
-        />
-      ))}
-      
-      {/* Planets */}
-      {planets.map((planet, index) => {
-        const angle = (360 / planets.length) * index;
-        const x = Math.cos((angle * Math.PI) / 180) * planet.distance * 2;
-        const z = Math.sin((angle * Math.PI) / 180) * planet.distance * 2;
+    <Suspense fallback={<div className="w-full h-full bg-black" />}>
+      <Canvas 
+        camera={{ position: [0, 5, 15], fov: 60 }}
+        style={{ background: 'transparent' }}
+      >
+        <ambientLight intensity={0.2} />
+        <pointLight position={[0, 0, 0]} intensity={1} color="#FFD700" />
         
-        return (
-          <Planet
-            key={planet.name}
-            position={[x, 0, z]}
-            radius={Math.max(0.1, planet.size * 0.1)}
-            color={planet.color}
-            speed={planet.speed}
-            name={planet.name}
-            distance={planet.distance}
-            size={planet.size}
-            temperature={planet.temperature}
-            facts={planet.facts}
-            isActive={index === currentPlanet}
-            onClick={() => onPlanetSelect(index)}
+        <Sun />
+        
+        {/* Orbit Rings */}
+        {planets.map((planet, index) => (
+          <OrbitRing 
+            key={`orbit-${index}`} 
+            radius={planet.distance * 2} 
+            color="#FFFFFF" 
           />
-        );
-      })}
-      
-      <OrbitControls
-        enableZoom={true}
-        enablePan={false}
-        autoRotate
-        autoRotateSpeed={0.5}
-        maxPolarAngle={Math.PI / 1.8}
-        minPolarAngle={Math.PI / 3}
-      />
-    </Canvas>
+        ))}
+        
+        {/* Planets */}
+        {planets.map((planet, index) => {
+          const angle = (360 / planets.length) * index;
+          const x = Math.cos((angle * Math.PI) / 180) * planet.distance * 2;
+          const z = Math.sin((angle * Math.PI) / 180) * planet.distance * 2;
+          
+          return (
+            <Planet
+              key={planet.name}
+              position={[x, 0, z]}
+              radius={Math.max(0.1, planet.size * 0.1)}
+              color={planet.color}
+              speed={planet.speed}
+              name={planet.name}
+              distance={planet.distance}
+              size={planet.size}
+              temperature={planet.temperature}
+              facts={planet.facts}
+              isActive={index === currentPlanet}
+              onClick={() => onPlanetSelect(index)}
+            />
+          );
+        })}
+        
+        <OrbitControls
+          enableZoom={true}
+          enablePan={false}
+          autoRotate
+          autoRotateSpeed={0.5}
+          maxPolarAngle={Math.PI / 1.8}
+          minPolarAngle={Math.PI / 3}
+        />
+      </Canvas>
+    </Suspense>
   );
 };
 
