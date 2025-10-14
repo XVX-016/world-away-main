@@ -1,42 +1,86 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Stars } from '@react-three/drei';
-import * as THREE from 'three';
-
-const Starfield3D: React.FC = () => {
-  const starsRef = useRef<THREE.Group>(null);
-
-  useFrame(() => {
-    if (starsRef.current) {
-      starsRef.current.rotation.x += 0.0001;
-      starsRef.current.rotation.y += 0.0001;
-    }
-  });
-
-  return (
-    <group ref={starsRef}>
-      <Stars
-        radius={300}
-        depth={60}
-        count={5000}
-        factor={7}
-        saturation={0}
-        fade
-        speed={1}
-      />
-    </group>
-  );
-};
+import React, { useRef, useEffect, useState } from 'react';
 
 const Simple3DStarfield: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const initStars = () => {
+      const stars = [];
+      const starCount = 3000;
+      
+      for (let i = 0; i < starCount; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          z: Math.random() * 1000,
+          speed: 0.1 + Math.random() * 0.5,
+          size: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.8 + 0.2
+        });
+        stars[i].originalX = stars[i].x;
+        stars[i].originalY = stars[i].y;
+      }
+
+      const animate = () => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+          star.z -= star.speed;
+          star.opacity = (1000 - star.z) / 1000;
+          
+          if (star.z <= 0) {
+            star.z = 1000;
+            star.x = Math.random() * canvas.width;
+            star.y = Math.random() * canvas.height;
+            star.originalX = star.x;
+            star.originalY = star.y;
+          }
+
+          const x = (star.x - canvas.width / 2) * (1000 / star.z) + canvas.width / 2;
+          const y = (star.y - canvas.height / 2) * (1000 / star.z) + canvas.height / 2;
+          const size = (1000 - star.z) / 1000 * star.size;
+
+          if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+
+        requestAnimationFrame(animate);
+      };
+
+      resizeCanvas();
+      animate();
+      setIsLoaded(true);
+    };
+
+    initStars();
+
+    window.addEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
+  }, []);
+
   return (
-    <Canvas
-      camera={{ position: [0, 0, 5], fov: 75 }}
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
       style={{ background: 'transparent' }}
-    >
-      <ambientLight intensity={0.1} />
-      <Starfield3D />
-    </Canvas>
+    />
   );
 };
 

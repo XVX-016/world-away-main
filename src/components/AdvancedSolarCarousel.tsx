@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause, RotateCcw, Info, Star } from 'lucide-react';
-import InteractiveSolarSystem from './InteractiveSolarSystem';
+import SimpleInteractiveSolarSystem from './SimpleInteractiveSolarSystem';
 import Simple3DStarfield from './Simple3DStarfield';
 
 interface Planet {
@@ -176,9 +176,9 @@ export const AdvancedSolarCarousel: React.FC = () => {
         <Simple3DStarfield />
       </div>
 
-      {/* Interactive 3D Solar System */}
+      {/* Interactive Solar System */}
       <div className="absolute inset-0">
-        <InteractiveSolarSystem 
+        <SimpleInteractiveSolarSystem 
           currentPlanet={currentIndex} 
           onPlanetSelect={setCurrentIndex} 
         />
