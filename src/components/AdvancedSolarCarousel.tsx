@@ -274,50 +274,50 @@ export const AdvancedSolarCarousel: React.FC = () => {
             <h2 className="text-4xl font-bold text-white mb-2">{currentPlanet.name}</h2>
             <p className="text-gray-300 text-lg mb-4">{currentPlanet.description}</p>
             
-            {/* Planet Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-white/10 rounded-lg p-4">
+            {/* Planet Stats - Simple Text Overlay */}
+            <div className="flex flex-wrap justify-center gap-6 mb-6 text-center">
+              <div>
                 <div className="text-2xl font-bold text-white">{currentPlanet.distance} AU</div>
-                <div className="text-sm text-gray-300">Distance from Sun</div>
+                <div className="text-sm text-gray-300">Distance</div>
               </div>
-              <div className="bg-white/10 rounded-lg p-4">
+              <div>
                 <div className="text-2xl font-bold text-white">{currentPlanet.size} R⊕</div>
-                <div className="text-sm text-gray-300">Size (Earth = 1)</div>
+                <div className="text-sm text-gray-300">Size</div>
               </div>
-              <div className="bg-white/10 rounded-lg p-4">
+              <div>
                 <div className="text-2xl font-bold text-white">{currentPlanet.speed} years</div>
                 <div className="text-sm text-gray-300">Orbital Period</div>
               </div>
-              <div className="bg-white/10 rounded-lg p-4">
+              <div>
                 <div className="text-2xl font-bold text-white">{currentPlanet.temperature}</div>
                 <div className="text-sm text-gray-300">Temperature</div>
               </div>
             </div>
 
-            {/* Additional Stats */}
+            {/* Additional Stats - Simple Text Overlay */}
             {showDetails && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white/10 rounded-lg p-4">
+              <div className="flex flex-wrap justify-center gap-6 mb-6 text-center">
+                <div>
                   <div className="text-2xl font-bold text-white">{currentPlanet.moons}</div>
                   <div className="text-sm text-gray-300">Moons</div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4">
+                <div>
                   <div className="text-2xl font-bold text-white">{currentPlanet.type}</div>
                   <div className="text-sm text-gray-300">Planet Type</div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4">
+                <div>
                   <div className="text-2xl font-bold text-white">{currentPlanet.speed * 365}</div>
                   <div className="text-sm text-gray-300">Days per Year</div>
                 </div>
               </div>
             )}
 
-            {/* Planet Facts */}
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {/* Planet Facts - Simple Text Overlay */}
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
               {currentPlanet.facts.map((fact, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-300 text-sm"
+                  className="text-white text-sm font-medium"
                 >
                   {fact}
                 </span>
