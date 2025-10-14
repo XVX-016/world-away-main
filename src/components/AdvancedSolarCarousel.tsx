@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause, RotateCcw, Info, Star } from 'lucide-react';
+import InteractiveStarfield from './EnhancedStarField3D';
+import InteractiveSolarSystem from './InteractiveSolarSystem';
 
 interface Planet {
   id: string;
@@ -169,141 +171,73 @@ export const AdvancedSolarCarousel: React.FC = () => {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Clean Starfield Background */}
-      <div className="absolute inset-0 bg-black">
-        {/* Animated Stars */}
-        {Array.from({ length: 150 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-              opacity: Math.random() * 0.8 + 0.2
-            }}
-          />
-        ))}
+      {/* Interactive 3D Starfield */}
+      <div className="absolute inset-0">
+        <InteractiveStarfield />
       </div>
 
-      {/* Solar System Visualization */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-[500px] h-[500px]">
-          {/* Sun at center with glow effect */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="w-12 h-12 bg-yellow-400 rounded-full shadow-2xl shadow-yellow-400/50 animate-pulse" />
-            <div className="absolute top-1/2 left-1/2 w-16 h-16 bg-yellow-300/20 rounded-full transform -translate-x-1/2 -translate-y-1/2 animate-ping" />
-          </div>
-          
-          {/* Orbital rings */}
-          {[60, 80, 100, 120, 140, 160, 180, 200].map((radius, index) => (
-            <div
-              key={index}
-              className="absolute top-1/2 left-1/2 border border-white/10 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-              style={{
-                width: `${radius * 2}px`,
-                height: `${radius * 2}px`
-              }}
-            />
-          ))}
-          
-          {/* Planets in orbit */}
-          {planets.map((planet, index) => {
-            const angle = (360 / planets.length) * index;
-            const distance = 120 + (planet.distance * 15);
-            const x = Math.cos((angle * Math.PI) / 180) * distance;
-            const y = Math.sin((angle * Math.PI) / 180) * distance;
-            const isActive = index === currentIndex;
-            
-            return (
-              <div
-                key={planet.id}
-                className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ${
-                  isActive ? 'scale-150 z-20' : 'scale-100 z-10'
-                }`}
-                style={{
-                  left: `calc(50% + ${x}px)`,
-                  top: `calc(50% + ${y}px)`,
-                }}
-              >
-                <div
-                  className="rounded-full shadow-lg transition-all duration-500 cursor-pointer"
-                  style={{
-                    width: `${Math.max(12, planet.size * 6)}px`,
-                    height: `${Math.max(12, planet.size * 6)}px`,
-                    backgroundColor: planet.color,
-                    boxShadow: isActive 
-                      ? `0 0 30px ${planet.color}60, 0 0 60px ${planet.color}40`
-                      : `0 0 15px ${planet.color}40`
-                  }}
-                  onClick={() => setCurrentIndex(index)}
-                />
-                {isActive && (
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 text-white text-sm font-bold whitespace-nowrap bg-black/50 px-3 py-1 rounded-full">
-                    {planet.name}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+      {/* Interactive 3D Solar System */}
+      <div className="absolute inset-0">
+        <InteractiveSolarSystem 
+          currentPlanet={currentIndex} 
+          onPlanetSelect={setCurrentIndex} 
+        />
       </div>
 
       {/* Planet Information Panel */}
       <div className={`absolute bottom-0 left-0 right-0 transition-all duration-500 ${
         showDetails ? 'h-96' : 'h-64'
-      } bg-gradient-to-t from-black/95 via-black/80 to-transparent`}>
+      } bg-gradient-to-t from-black/80 via-black/60 to-transparent backdrop-blur-lg`}>
         <div className="max-w-6xl mx-auto p-6">
           {/* Planet Details */}
           <div className="text-center mb-6">
             <h2 className="text-4xl font-bold text-white mb-2">{currentPlanet.name}</h2>
             <p className="text-gray-300 text-lg mb-4">{currentPlanet.description}</p>
             
-            {/* Planet Stats - Simple Text Overlay */}
+            {/* Planet Stats - Glassy Cards */}
             <div className="flex flex-wrap justify-center gap-6 mb-6 text-center">
-              <div>
+              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                 <div className="text-2xl font-bold text-white">{currentPlanet.distance} AU</div>
                 <div className="text-sm text-gray-300">Distance</div>
               </div>
-              <div>
+              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                 <div className="text-2xl font-bold text-white">{currentPlanet.size} R⊕</div>
                 <div className="text-sm text-gray-300">Size</div>
               </div>
-              <div>
+              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                 <div className="text-2xl font-bold text-white">{currentPlanet.speed} years</div>
                 <div className="text-sm text-gray-300">Orbital Period</div>
               </div>
-              <div>
+              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                 <div className="text-2xl font-bold text-white">{currentPlanet.temperature}</div>
                 <div className="text-sm text-gray-300">Temperature</div>
               </div>
             </div>
 
-            {/* Additional Stats - Simple Text Overlay */}
+            {/* Additional Stats - Glassy Cards */}
             {showDetails && (
               <div className="flex flex-wrap justify-center gap-6 mb-6 text-center">
-                <div>
+                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                   <div className="text-2xl font-bold text-white">{currentPlanet.moons}</div>
                   <div className="text-sm text-gray-300">Moons</div>
                 </div>
-                <div>
+                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                   <div className="text-2xl font-bold text-white">{currentPlanet.type}</div>
                   <div className="text-sm text-gray-300">Planet Type</div>
                 </div>
-                <div>
+                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
                   <div className="text-2xl font-bold text-white">{currentPlanet.speed * 365}</div>
                   <div className="text-sm text-gray-300">Days per Year</div>
                 </div>
               </div>
             )}
 
-            {/* Planet Facts - Simple Text Overlay */}
+            {/* Planet Facts - Glassy Pills */}
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               {currentPlanet.facts.map((fact, index) => (
                 <span
                   key={index}
-                  className="text-white text-sm font-medium"
+                  className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-full px-4 py-2 text-white text-sm font-medium"
                 >
                   {fact}
                 </span>
