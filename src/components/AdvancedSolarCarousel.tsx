@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Play, Pause, RotateCcw, Info, Star } from 'lucide-react';
-import SimpleInteractiveSolarSystem from './SimpleInteractiveSolarSystem';
+import { ChevronLeft, ChevronRight, Play, Pause, RotateCcw } from 'lucide-react';
 import Simple3DStarfield from './Simple3DStarfield';
+import SolarSystem3D from './SolarSystem3D';
 
 interface Planet {
   id: string;
@@ -126,9 +126,7 @@ const planets: Planet[] = [
 
 export const AdvancedSolarCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [animationSpeed, setAnimationSpeed] = useState(1);
-  const [showDetails, setShowDetails] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Auto-play functionality
@@ -136,7 +134,7 @@ export const AdvancedSolarCarousel: React.FC = () => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % planets.length);
-      }, 3000 / animationSpeed);
+      }, 5000);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -148,7 +146,7 @@ export const AdvancedSolarCarousel: React.FC = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isPlaying, animationSpeed]);
+  }, [isPlaying]);
 
   const nextPlanet = () => {
     setCurrentIndex((prev) => (prev + 1) % planets.length);
@@ -167,155 +165,67 @@ export const AdvancedSolarCarousel: React.FC = () => {
     setCurrentIndex(0);
   };
 
-  const currentPlanet = planets[currentIndex];
-
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* 3D Starfield Background */}
-      <div className="absolute inset-0">
+      {/* 3D Starfield Background - Full Coverage */}
+      <div className="absolute inset-0 w-full h-full">
         <Simple3DStarfield />
       </div>
 
-      {/* Interactive Solar System */}
-      <div className="absolute inset-0">
-        <SimpleInteractiveSolarSystem 
+      {/* 3D Solar System Model */}
+      <div className="absolute inset-0 w-full h-full">
+        <SolarSystem3D 
           currentPlanet={currentIndex} 
           onPlanetSelect={setCurrentIndex} 
         />
       </div>
 
-      {/* Planet Information Panel */}
-      <div className={`absolute bottom-0 left-0 right-0 transition-all duration-500 ${
-        showDetails ? 'h-96' : 'h-64'
-      } bg-gradient-to-t from-black/80 via-black/60 to-transparent backdrop-blur-lg`}>
-        <div className="max-w-6xl mx-auto p-6">
-          {/* Planet Details */}
-          <div className="text-center mb-6">
-            <h2 className="text-4xl font-bold text-white mb-2">{currentPlanet.name}</h2>
-            <p className="text-gray-300 text-lg mb-4">{currentPlanet.description}</p>
-            
-            {/* Planet Stats - Glassy Cards */}
-            <div className="flex flex-wrap justify-center gap-6 mb-6 text-center">
-              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                <div className="text-2xl font-bold text-white">{currentPlanet.distance} AU</div>
-                <div className="text-sm text-gray-300">Distance</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                <div className="text-2xl font-bold text-white">{currentPlanet.size} R⊕</div>
-                <div className="text-sm text-gray-300">Size</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                <div className="text-2xl font-bold text-white">{currentPlanet.speed} years</div>
-                <div className="text-sm text-gray-300">Orbital Period</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                <div className="text-2xl font-bold text-white">{currentPlanet.temperature}</div>
-                <div className="text-sm text-gray-300">Temperature</div>
-              </div>
-            </div>
-
-            {/* Additional Stats - Glassy Cards */}
-            {showDetails && (
-              <div className="flex flex-wrap justify-center gap-6 mb-6 text-center">
-                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                  <div className="text-2xl font-bold text-white">{currentPlanet.moons}</div>
-                  <div className="text-sm text-gray-300">Moons</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                  <div className="text-2xl font-bold text-white">{currentPlanet.type}</div>
-                  <div className="text-sm text-gray-300">Planet Type</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-4 min-w-[120px]">
-                  <div className="text-2xl font-bold text-white">{currentPlanet.speed * 365}</div>
-                  <div className="text-sm text-gray-300">Days per Year</div>
-                </div>
-              </div>
-            )}
-
-            {/* Planet Facts - Glassy Pills */}
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              {currentPlanet.facts.map((fact, index) => (
-                <span
-                  key={index}
-                  className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-full px-4 py-2 text-white text-sm font-medium"
-                >
-                  {fact}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Carousel Controls */}
-          <div className="flex items-center justify-center gap-4">
+      {/* Minimal Controls - Top Right */}
+      <div className="absolute top-4 right-4 z-50 flex flex-col items-end gap-2">
+        <div className="flex items-center gap-2">
             <button
               onClick={prevPlanet}
-              className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 transform hover:scale-110"
+            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
             >
-              <ChevronLeft className="w-6 h-6 text-white" />
+            <ChevronLeft className="w-5 h-5 text-white" />
             </button>
-
             <button
               onClick={togglePlayPause}
-              className="p-4 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
+            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
             >
               {isPlaying ? (
-                <Pause className="w-6 h-6 text-white" />
+              <Pause className="w-5 h-5 text-white" />
               ) : (
-                <Play className="w-6 h-6 text-white" />
+              <Play className="w-5 h-5 text-white" />
               )}
             </button>
-
             <button
-              onClick={() => setShowDetails(!showDetails)}
-              className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 transform hover:scale-110"
+            onClick={nextPlanet}
+            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
             >
-              <Info className="w-6 h-6 text-white" />
+            <ChevronRight className="w-5 h-5 text-white" />
             </button>
-
             <button
               onClick={resetCarousel}
-              className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-              <RotateCcw className="w-6 h-6 text-white" />
-            </button>
-
-            <button
-              onClick={nextPlanet}
-              className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-              <ChevronRight className="w-6 h-6 text-white" />
+            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
+          >
+            <RotateCcw className="w-5 h-5 text-white" />
             </button>
           </div>
 
           {/* Progress Indicators */}
-          <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-1">
             {planets.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? 'bg-white scale-125'
+                  ? 'bg-white scale-125'
                     : 'bg-white/30 hover:bg-white/50'
                 }`}
               />
             ))}
-          </div>
-
-          {/* Speed Control */}
-          <div className="flex items-center justify-center gap-4 mt-4">
-            <span className="text-gray-300 text-sm">Speed:</span>
-            <input
-              type="range"
-              min="0.5"
-              max="3"
-              step="0.5"
-              value={animationSpeed}
-              onChange={(e) => setAnimationSpeed(parseFloat(e.target.value))}
-              className="w-24 h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
-            />
-            <span className="text-gray-300 text-sm">{animationSpeed}x</span>
-          </div>
         </div>
       </div>
     </div>
