@@ -9,6 +9,32 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Guard: prevent any script from redefining document.visibilityState
+      (function () {
+        const originalDefineProperty = Object.defineProperty;
+        Object.defineProperty = function (target, property, descriptor) {
+          try {
+            if (
+              (target === document || target === Document.prototype) &&
+              (property === 'visibilityState' || property === 'hidden')
+            ) {
+              // Silently ignore attempts to redefine visibility properties
+              return target[property];
+            }
+            return originalDefineProperty.call(Object, target, property, descriptor);
+          } catch (err) {
+            if (
+              (target === document || target === Document.prototype) &&
+              String(property) === 'visibilityState'
+            ) {
+              return document.visibilityState;
+            }
+            throw err;
+          }
+        };
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
