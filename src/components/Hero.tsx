@@ -25,11 +25,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
         Exploring Exoplanets with AI
       </p>
       
-      {/* Challenge Badge */}
-      <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-gray-500/30 rounded-full px-6 py-3 mb-12">
-        <Zap className="w-5 h-5 text-yellow-400" />
-        <span className="text-gray-200 font-medium">NASA Space Apps Challenge 2024</span>
-      </div>
+      {/* Challenge Badge removed */}
       
       {/* Project Description */}
       <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed text-center">

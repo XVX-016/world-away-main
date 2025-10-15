@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Play, Pause, RotateCcw } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Simple3DStarfield from './Simple3DStarfield';
-import SimpleSolarSystem3D from './SimpleSolarSystem3D';
+import InteractiveSolarSystem from './InteractiveSolarSystem';
 
 interface Planet {
   id: string;
@@ -126,27 +126,7 @@ const planets: Planet[] = [
 
 export const AdvancedSolarCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Auto-play functionality
-  useEffect(() => {
-    if (isPlaying) {
-      intervalRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % planets.length);
-      }, 5000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isPlaying]);
+  // Auto-advance removed per UI cleanup; navigation via arrows only
 
   const nextPlanet = () => {
     setCurrentIndex((prev) => (prev + 1) % planets.length);
@@ -156,14 +136,7 @@ export const AdvancedSolarCarousel: React.FC = () => {
     setCurrentIndex((prev) => (prev - 1 + planets.length) % planets.length);
   };
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const resetCarousel = () => {
-    setIsPlaying(false);
-    setCurrentIndex(0);
-  };
+  // optional reset kept for future use; not currently exposed
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
@@ -173,45 +146,31 @@ export const AdvancedSolarCarousel: React.FC = () => {
       </div>
 
       {/* 3D Solar System Model */}
-      <div className="absolute inset-0 w-full h-full">
-        <SimpleSolarSystem3D 
-          currentPlanet={currentIndex} 
-          onPlanetSelect={setCurrentIndex} 
-        />
+      <div className="absolute inset-0 w-full h-full pointer-events-none">
+        <div className="w-full h-full pointer-events-auto">
+          <InteractiveSolarSystem 
+            currentPlanet={currentIndex} 
+            onPlanetSelect={setCurrentIndex} 
+          />
+        </div>
       </div>
 
-      {/* Minimal Controls - Top Right */}
+      {/* Minimal Controls - Top Right (pause/refresh removed) */}
       <div className="absolute top-4 right-4 z-50 flex flex-col items-end gap-2">
         <div className="flex items-center gap-2">
-            <button
-              onClick={prevPlanet}
-            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-            <ChevronLeft className="w-5 h-5 text-white" />
-            </button>
-            <button
-              onClick={togglePlayPause}
-            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-              {isPlaying ? (
-              <Pause className="w-5 h-5 text-white" />
-              ) : (
-              <Play className="w-5 h-5 text-white" />
-              )}
-            </button>
-            <button
-            onClick={nextPlanet}
-            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-            <ChevronRight className="w-5 h-5 text-white" />
-            </button>
-            <button
-              onClick={resetCarousel}
+          <button
+            onClick={prevPlanet}
             className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
           >
-            <RotateCcw className="w-5 h-5 text-white" />
-            </button>
-          </div>
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
+          <button
+            onClick={nextPlanet}
+            className="p-3 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-300 transform hover:scale-110"
+          >
+            <ChevronRight className="w-5 h-5 text-white" />
+          </button>
+        </div>
 
           {/* Progress Indicators */}
         <div className="flex justify-center gap-1">

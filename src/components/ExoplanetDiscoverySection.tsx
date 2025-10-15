@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Search, Filter, Star, TrendingUp } from 'lucide-react';
-import { ExoplanetDiscoveryCard, sampleExoplanets, ExoplanetData } from './ExoplanetDiscoveryCard';
+import { ExoplanetDiscoveryCard } from './ExoplanetDiscoveryCard';
+import { useExoplanets } from '../contexts/ExoplanetContext';
 
 export const ExoplanetDiscoverySection: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterMethod, setFilterMethod] = useState('all');
-  const [analyzedExoplanets, setAnalyzedExoplanets] = useState<ExoplanetData[]>([]);
+  const [analyzedExoplanets, setAnalyzedExoplanets] = useState<string[]>([]);
+  const { discoveredExoplanets, getTotalCount, getAnalyzedCount } = useExoplanets();
 
-  const handleAnalyze = (exoplanet: ExoplanetData) => {
-    setAnalyzedExoplanets(prev => [...prev, exoplanet]);
+  const handleAnalyze = (exoplanetId: string) => {
+    setAnalyzedExoplanets(prev => [...prev, exoplanetId]);
   };
 
-  const filteredExoplanets = sampleExoplanets.filter(exoplanet => {
+  const filteredExoplanets = discoveredExoplanets.filter(exoplanet => {
     const matchesSearch = exoplanet.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterMethod === 'all' || exoplanet.discoveryMethod.toLowerCase().includes(filterMethod.toLowerCase());
     return matchesSearch && matchesFilter;
@@ -64,7 +66,7 @@ export const ExoplanetDiscoverySection: React.FC = () => {
             <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <Star className="w-6 h-6 text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">{sampleExoplanets.length}</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">{getTotalCount()}</h3>
             <p className="text-gray-300">Total Exoplanets</p>
           </div>
           
@@ -72,8 +74,8 @@ export const ExoplanetDiscoverySection: React.FC = () => {
             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-6 h-6 text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">{analyzedExoplanets.length}</h3>
-            <p className="text-gray-300">Analyzed</p>
+            <h3 className="text-2xl font-bold text-white mb-2">{getAnalyzedCount()}</h3>
+            <p className="text-gray-300">High Confidence</p>
           </div>
           
           <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 text-center">
@@ -81,20 +83,22 @@ export const ExoplanetDiscoverySection: React.FC = () => {
               <Filter className="w-6 h-6 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">
-              {Math.round((analyzedExoplanets.length / sampleExoplanets.length) * 100)}%
+              {getTotalCount() > 0 ? Math.round((getAnalyzedCount() / getTotalCount()) * 100) : 0}%
             </h3>
-            <p className="text-gray-300">Analysis Rate</p>
+            <p className="text-gray-300">Confidence Rate</p>
           </div>
         </div>
 
-        {/* Exoplanet Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Exoplanet Cards Grid - Improved Alignment */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           {filteredExoplanets.map((exoplanet) => (
-            <ExoplanetDiscoveryCard
-              key={exoplanet.id}
-              exoplanet={exoplanet}
-              onAnalyze={handleAnalyze}
-            />
+            <div key={exoplanet.id} className="flex">
+              <ExoplanetDiscoveryCard
+                exoplanet={exoplanet}
+                onAnalyze={() => handleAnalyze(exoplanet.id)}
+                isAnalyzed={analyzedExoplanets.includes(exoplanet.id)}
+              />
+            </div>
           ))}
         </div>
 

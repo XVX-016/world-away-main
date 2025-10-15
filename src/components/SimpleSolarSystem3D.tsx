@@ -105,7 +105,7 @@ const SimpleSolarSystem3D: React.FC<SimpleSolarSystem3DProps> = ({ currentPlanet
         );
       })}
 
-      <style jsx>{`
+      <style>{`
         @keyframes orbit {
           from { transform: translate(-50%, -50%) rotate(0deg) translateX(${planets[0]?.distance || 100}px) rotate(0deg); }
           to { transform: translate(-50%, -50%) rotate(360deg) translateX(${planets[0]?.distance || 100}px) rotate(-360deg); }

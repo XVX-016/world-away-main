@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { Upload, Brain, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
+import { Upload, Brain, TrendingUp, AlertCircle, CheckCircle, Star } from 'lucide-react';
 import { FileUpload } from './FileUpload';
 import { LightCurveChart } from './LightCurveChart';
 import { ModelOutput } from './ModelOutput';
 import { FeatureImportance } from './FeatureImportance';
 import { RealMLTraining } from './RealMLTraining';
-
-export interface LightCurveData {
-  time: number;
-  flux: number;
-}
+import { ExoplanetDetector, LightCurveData, TransitDetection } from '../utils/exoplanetDetector';
+import { useExoplanets } from '../contexts/ExoplanetContext';
 
 export const DemoSection: React.FC = () => {
   const [data, setData] = useState<LightCurveData[]>([]);
@@ -20,23 +17,57 @@ export const DemoSection: React.FC = () => {
     transitDepth?: number;
     period?: number;
   } | null>(null);
+  const [newPlanetDiscovered, setNewPlanetDiscovered] = useState(false);
+  const { addExoplanet } = useExoplanets();
 
-  const handleDataUpload = (newData: LightCurveData[]) => {
+  const handleDataUpload = async (newData: LightCurveData[]) => {
     setData(newData);
     setAnalysis(null);
+    setNewPlanetDiscovered(false);
     
-    // Simulate AI analysis
+    // Real AI analysis using the ExoplanetDetector
     setIsAnalyzing(true);
-    setTimeout(() => {
-      const mockAnalysis = {
-        isPlanet: Math.random() > 0.3,
-        confidence: 0.7 + Math.random() * 0.25,
-        transitDepth: 0.001 + Math.random() * 0.01,
-        period: 2 + Math.random() * 10
+    
+    try {
+      // Simulate processing time for better UX
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Run real exoplanet detection algorithm
+      const detection: TransitDetection = ExoplanetDetector.detectTransits(newData);
+      
+      const analysisResult = {
+        isPlanet: detection.isPlanet,
+        confidence: detection.confidence,
+        transitDepth: detection.transitDepth,
+        period: detection.period
       };
-      setAnalysis(mockAnalysis);
+      
+      setAnalysis(analysisResult);
+      
+      // If a planet is detected, add it to the discovery database
+      if (detection.isPlanet && detection.confidence > 0.6) {
+        const newExoplanet = ExoplanetDetector.generateExoplanetCandidate(
+          detection, 
+          newData,
+          `Uploaded Star ${Date.now()}`
+        );
+        
+        if (newExoplanet) {
+          addExoplanet(newExoplanet);
+          setNewPlanetDiscovered(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error analyzing data:', error);
+      setAnalysis({
+        isPlanet: false,
+        confidence: 0,
+        transitDepth: 0,
+        period: 0
+      });
+    } finally {
       setIsAnalyzing(false);
-    }, 3000);
+    }
   };
 
   return (
@@ -70,6 +101,22 @@ export const DemoSection: React.FC = () => {
 
             {/* Real ML Model Training */}
             <RealMLTraining />
+
+            {/* New Planet Discovery Notification */}
+            {newPlanetDiscovered && (
+              <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-lg border border-green-500/30 rounded-2xl p-6 animate-pulse">
+                <div className="flex items-center gap-3 mb-4">
+                  <Star className="w-6 h-6 text-green-400" />
+                  <h3 className="text-xl font-semibold text-white">🎉 New Exoplanet Discovered!</h3>
+                </div>
+                <p className="text-green-300 mb-2">
+                  Congratulations! Our AI model has detected a new exoplanet in your uploaded data.
+                </p>
+                <p className="text-gray-300 text-sm">
+                  The new exoplanet has been added to our discovery database and is now available in the Exoplanet Discovery section.
+                </p>
+              </div>
+            )}
 
             {/* Model Status */}
             {(isAnalyzing || analysis) && (
