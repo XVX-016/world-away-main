@@ -82,16 +82,16 @@ const Simple3DStarfield: React.FC = () => {
       (canvas as any)._mouseY = e.clientY;
     };
 
-    const resizeCanvas = () => {
+    const handleResize = () => {
       if (!canvasRef.current) return;
       canvasRef.current.width = window.innerWidth;
       canvasRef.current.height = window.innerHeight;
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', onMouseMove);
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', onMouseMove);
     };
   }, []);
