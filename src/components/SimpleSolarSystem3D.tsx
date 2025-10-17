@@ -42,10 +42,10 @@ const SimpleSolarSystem3D: React.FC<SimpleSolarSystem3DProps> = ({ currentPlanet
     <div 
       ref={containerRef}
       className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer"
-      style={{ perspective: '1000px' }}
+      style={{ perspective: '1200px' }}
     >
       {/* Sun */}
-      <div className="absolute w-6 h-6 bg-yellow-400 rounded-full shadow-2xl shadow-yellow-400/50 animate-pulse z-10">
+      <div className="absolute w-8 h-8 bg-yellow-400 rounded-full shadow-2xl shadow-yellow-400/50 animate-pulse z-10" style={{ transform: 'translateZ(100px)' }}>
         <div className="absolute inset-0 w-6 h-6 bg-yellow-300/30 rounded-full animate-ping"></div>
       </div>
 
@@ -53,12 +53,11 @@ const SimpleSolarSystem3D: React.FC<SimpleSolarSystem3DProps> = ({ currentPlanet
       {planets.map((planet, index) => (
         <div
           key={`orbit-${index}`}
-          className="absolute border border-white/10 rounded-full animate-spin"
+          className="absolute border border-white/10 rounded-full"
           style={{
             width: `${planet.distance * 2}px`,
             height: `${planet.distance * 2}px`,
-            animationDuration: `${20 / planet.speed}s`,
-            animationTimingFunction: 'linear'
+            transform: 'rotateX(75deg)'
           }}
         />
       ))}
@@ -67,10 +66,7 @@ const SimpleSolarSystem3D: React.FC<SimpleSolarSystem3DProps> = ({ currentPlanet
       {planets.map((planet, index) => {
         const angle = (360 / planets.length) * index;
         const isActive = index === currentPlanet;
-        const isHovered = Math.sqrt(
-          Math.pow(mousePos.x - (window.innerWidth / 2 + Math.cos((angle * Math.PI) / 180) * planet.distance), 2) +
-          Math.pow(mousePos.y - (window.innerHeight / 2 + Math.sin((angle * Math.PI) / 180) * planet.distance), 2)
-        ) < planet.size + 20;
+        const isHovered = false;
 
         return (
           <div
@@ -83,14 +79,14 @@ const SimpleSolarSystem3D: React.FC<SimpleSolarSystem3DProps> = ({ currentPlanet
               height: `${planet.size}px`,
               backgroundColor: planet.color,
               left: `calc(50% + ${Math.cos((angle * Math.PI) / 180) * planet.distance}px)`,
-              top: `calc(50% + ${Math.sin((angle * Math.PI) / 180) * planet.distance}px)`,
-              transform: 'translate(-50%, -50%)',
+              top: `calc(50% + ${Math.sin((angle * Math.PI) / 180) * (planet.distance * 0.25)}px)`,
+              transform: 'translate(-50%, -50%) translateZ(100px)',
               boxShadow: isActive 
                 ? `0 0 30px ${planet.color}60, 0 0 60px ${planet.color}40`
                 : isHovered
                 ? `0 0 20px ${planet.color}40`
                 : `0 0 10px ${planet.color}30`,
-              animation: `orbit ${20 / planet.speed}s linear infinite`
+              animation: `orbit-${index} ${20 / planet.speed}s linear infinite`
             }}
             onClick={() => onPlanetSelect(index)}
             onMouseEnter={() => {}}
@@ -106,10 +102,14 @@ const SimpleSolarSystem3D: React.FC<SimpleSolarSystem3DProps> = ({ currentPlanet
       })}
 
       <style>{`
-        @keyframes orbit {
-          from { transform: translate(-50%, -50%) rotate(0deg) translateX(${planets[0]?.distance || 100}px) rotate(0deg); }
-          to { transform: translate(-50%, -50%) rotate(360deg) translateX(${planets[0]?.distance || 100}px) rotate(-360deg); }
-        }
+        ${planets
+          .map((p, i) => `
+          @keyframes orbit-${i} {
+            from { transform: translate(-50%, -50%) translateZ(100px) rotate(0deg) translateX(${p.distance}px) rotate(0deg); }
+            to { transform: translate(-50%, -50%) translateZ(100px) rotate(360deg) translateX(${p.distance}px) rotate(-360deg); }
+          }
+        `)
+          .join('\n')}
       `}</style>
     </div>
   );

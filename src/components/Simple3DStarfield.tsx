@@ -19,6 +19,8 @@ const Simple3DStarfield: React.FC = () => {
     const initStars = () => {
       const stars = [];
       const starCount = 3000;
+      let mouseX = 0;
+      let mouseY = 0;
       
       for (let i = 0; i < starCount; i++) {
         stars.push({
@@ -49,8 +51,9 @@ const Simple3DStarfield: React.FC = () => {
             star.originalY = star.y;
           }
 
-          const x = (star.x - canvas.width / 2) * (1000 / star.z) + canvas.width / 2;
-          const y = (star.y - canvas.height / 2) * (1000 / star.z) + canvas.height / 2;
+          const parallax = ((1000 - star.z) / 1000) * 20;
+          const x = (star.x - canvas.width / 2) * (1000 / star.z) + canvas.width / 2 + (mouseX - canvas.width / 2) * (parallax / 100);
+          const y = (star.y - canvas.height / 2) * (1000 / star.z) + canvas.height / 2 + (mouseY - canvas.height / 2) * (parallax / 100);
           const size = (1000 - star.z) / 1000 * star.size;
 
           if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
@@ -71,8 +74,26 @@ const Simple3DStarfield: React.FC = () => {
 
     initStars();
 
+    const onMouseMove = (e: MouseEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      // store on the canvas element for access in animate closure
+      (canvas as any)._mouseX = e.clientX;
+      (canvas as any)._mouseY = e.clientY;
+    };
+
+    const resizeCanvas = () => {
+      if (!canvasRef.current) return;
+      canvasRef.current.width = window.innerWidth;
+      canvasRef.current.height = window.innerHeight;
+    };
+
     window.addEventListener('resize', resizeCanvas);
-    return () => window.removeEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', onMouseMove);
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', onMouseMove);
+    };
   }, []);
 
   return (
