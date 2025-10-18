@@ -93,21 +93,48 @@ const WikiPage: React.FC = () => {
       id: '2',
       name: 'Proxima Centauri b',
       type: 'planet',
-      description: 'Proxima Centauri b is an exoplanet orbiting within the habitable zone of the red dwarf star Proxima Centauri, the closest star to the Sun.',
-      facts: [
-        'Closest known exoplanet to Earth',
-        'Located in the habitable zone of its star',
-        'Receives about 65% of the radiation Earth gets from the Sun',
-        'May be tidally locked to its star'
-      ],
+      description: 'Proxima Centauri b is an exoplanet orbiting within the habitable zone of the red dwarf star Proxima Centauri, the closest star to the Sun at a distance of 4.2 light-years.',
+      overview: 'Discovered in 2016, Proxima Centauri b is the closest known exoplanet to Earth and orbits within the habitable zone of its star. Despite being in the habitable zone, the planet faces significant challenges including intense stellar flares and potential tidal locking.',
+      characteristics: {
+        physical: [
+          'Minimum mass of 1.27 Earth masses',
+          'Radius estimated at 1.3 Earth radii',
+          'Density suggests a rocky composition',
+          'Surface gravity similar to Earth'
+        ],
+        orbital: [
+          'Orbital period of 11.2 days',
+          'Semi-major axis of 0.0485 AU',
+          'Eccentricity of 0.0 (circular orbit)',
+          'Receives 65% of Earth\'s stellar flux'
+        ],
+        atmospheric: [
+          'May have lost its atmosphere due to stellar activity',
+          'Potential for water if atmosphere is retained',
+          'Subject to intense X-ray and UV radiation'
+        ]
+      },
+      discovery: {
+        date: '2016-08-24',
+        discoverer: 'European Southern Observatory',
+        method: 'Radial velocity',
+        significance: 'Closest known exoplanet to Earth'
+      },
       properties: {
         size: 1.3,
         distance: 4.2,
         temperature: 234,
-        orbitalPeriod: 11.2
+        mass: 1.27,
+        orbitalPeriod: 11.2,
+        radius: 1.3,
+        density: 5.0
       },
-      discoveryDate: '2016-08-24',
-      discoverer: 'European Southern Observatory'
+      references: [
+        'Anglada-Escudé, G., et al. (2016). "A terrestrial planet candidate in a temperate orbit around Proxima Centauri." Nature.',
+        'ESO Press Release. "Planet Found in Habitable Zone Around Nearest Star."',
+        'Ribas, I., et al. (2016). "The habitability of Proxima Centauri b." Astronomy & Astrophysics.'
+      ],
+      relatedObjects: ['Proxima Centauri', 'Alpha Centauri A', 'Alpha Centauri B']
     },
     {
       id: '3',
@@ -296,66 +323,153 @@ const WikiPage: React.FC = () => {
           <div className="lg:col-span-1">
             {selectedObject ? (
               <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 sticky top-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${getTypeColor(selectedObject.type)}`}>
-                    {selectedObject.type === 'planet' && <Star className="w-6 h-6" />}
-                    {selectedObject.type === 'star' && <Zap className="w-6 h-6" />}
-                    {selectedObject.type === 'blackhole' && <Target className="w-6 h-6" />}
-                    {selectedObject.type === 'asteroid' && <TrendingUp className="w-6 h-6" />}
+                {/* Wikipedia-style header */}
+                <div className="border-b border-white/10 pb-6 mb-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${getTypeColor(selectedObject.type)}`}>
+                      {selectedObject.type === 'planet' && <Star className="w-6 h-6" />}
+                      {selectedObject.type === 'star' && <Zap className="w-6 h-6" />}
+                      {selectedObject.type === 'blackhole' && <Target className="w-6 h-6" />}
+                      {selectedObject.type === 'asteroid' && <TrendingUp className="w-6 h-6" />}
+                    </div>
+                    <div>
+                      <h1 className="text-3xl font-bold text-white">{selectedObject.name}</h1>
+                      <p className="text-gray-400 capitalize text-lg">{selectedObject.type}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">{selectedObject.name}</h3>
-                    <p className="text-gray-400 capitalize">{selectedObject.type}</p>
-                  </div>
+                  
+                  <p className="text-gray-300 text-lg leading-relaxed">{selectedObject.description}</p>
                 </div>
 
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Description</h4>
-                    <p className="text-gray-300">{selectedObject.description}</p>
-                  </div>
+                {/* Wikipedia-style content sections */}
+                <div className="space-y-8">
+                  {/* Overview */}
+                  <section>
+                    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">Overview</h2>
+                    <p className="text-gray-300 leading-relaxed">{selectedObject.overview}</p>
+                  </section>
 
-                  <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Key Facts</h4>
-                    <ul className="space-y-2">
-                      {selectedObject.facts.map((fact, index) => (
-                        <li key={index} className="flex items-start gap-2 text-gray-300">
-                          <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                          <span>{fact}</span>
+                  {/* Characteristics */}
+                  <section>
+                    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">Characteristics</h2>
+                    
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-3">Physical Properties</h3>
+                        <ul className="space-y-2">
+                          {selectedObject.characteristics.physical.map((char, index) => (
+                            <li key={index} className="flex items-start gap-2 text-gray-300">
+                              <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+                              <span>{char}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-3">Orbital Properties</h3>
+                        <ul className="space-y-2">
+                          {selectedObject.characteristics.orbital.map((char, index) => (
+                            <li key={index} className="flex items-start gap-2 text-gray-300">
+                              <span className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></span>
+                              <span>{char}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {selectedObject.characteristics.atmospheric && (
+                        <div>
+                          <h3 className="text-xl font-semibold text-white mb-3">Atmospheric Properties</h3>
+                          <ul className="space-y-2">
+                            {selectedObject.characteristics.atmospheric.map((char, index) => (
+                              <li key={index} className="flex items-start gap-2 text-gray-300">
+                                <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></span>
+                                <span>{char}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </section>
+
+                  {/* Discovery */}
+                  <section>
+                    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">Discovery</h2>
+                    <div className="bg-white/5 rounded-lg p-4 space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-gray-400 text-sm">Discovery Date:</span>
+                          <p className="text-white font-semibold">{selectedObject.discovery.date}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-400 text-sm">Discoverer:</span>
+                          <p className="text-white font-semibold">{selectedObject.discovery.discoverer}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-400 text-sm">Method:</span>
+                          <p className="text-white font-semibold">{selectedObject.discovery.method}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-400 text-sm">Significance:</span>
+                          <p className="text-white font-semibold">{selectedObject.discovery.significance}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Physical Properties Table */}
+                  <section>
+                    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">Physical Properties</h2>
+                    <div className="bg-white/5 rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <tbody>
+                          {Object.entries(selectedObject.properties).map(([key, value]) => (
+                            <tr key={key} className="border-b border-white/10 last:border-b-0">
+                              <td className="px-4 py-3 text-gray-400 capitalize font-medium">
+                                {key.replace(/([A-Z])/g, ' $1').trim()}
+                              </td>
+                              <td className="px-4 py-3 text-white font-semibold">
+                                {typeof value === 'number' ? value.toFixed(2) : value}
+                                {key === 'size' || key === 'radius' ? ' R⊕' : ''}
+                                {key === 'distance' ? ' ly' : ''}
+                                {key === 'temperature' ? ' K' : ''}
+                                {key === 'mass' ? ' M⊕' : ''}
+                                {key === 'orbitalPeriod' ? ' days' : ''}
+                                {key === 'density' ? ' g/cm³' : ''}
+                                {key === 'gravity' ? ' g' : ''}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+
+                  {/* References */}
+                  <section>
+                    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">References</h2>
+                    <ol className="space-y-2">
+                      {selectedObject.references.map((ref, index) => (
+                        <li key={index} className="text-gray-300 text-sm leading-relaxed">
+                          <span className="text-blue-400 font-semibold">[{index + 1}]</span> {ref}
                         </li>
                       ))}
-                    </ul>
-                  </div>
+                    </ol>
+                  </section>
 
-                  {selectedObject.properties && (
-                    <div>
-                      <h4 className="text-lg font-semibold text-white mb-3">Properties</h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        {Object.entries(selectedObject.properties).map(([key, value]) => (
-                          <div key={key} className="bg-white/5 rounded-lg p-3">
-                            <div className="text-gray-400 text-sm capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
-                            <div className="text-white font-semibold">{value}</div>
-                          </div>
-                        ))}
-                      </div>
+                  {/* Related Objects */}
+                  <section>
+                    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2">See Also</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedObject.relatedObjects.map((obj, index) => (
+                        <span key={index} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30">
+                          {obj}
+                        </span>
+                      ))}
                     </div>
-                  )}
-
-                  {selectedObject.discoveryDate && (
-                    <div>
-                      <h4 className="text-lg font-semibold text-white mb-3">Discovery</h4>
-                      <div className="bg-white/5 rounded-lg p-4">
-                        <div className="text-gray-300">
-                          <strong>Date:</strong> {selectedObject.discoveryDate}
-                        </div>
-                        {selectedObject.discoverer && (
-                          <div className="text-gray-300 mt-2">
-                            <strong>Discoverer:</strong> {selectedObject.discoverer}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                  </section>
                 </div>
               </div>
             ) : (
