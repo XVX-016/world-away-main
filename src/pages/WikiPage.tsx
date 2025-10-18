@@ -6,16 +6,31 @@ interface CelestialObject {
   name: string;
   type: 'planet' | 'star' | 'moon' | 'asteroid' | 'comet' | 'blackhole';
   description: string;
-  facts: string[];
+  overview: string;
+  characteristics: {
+    physical: string[];
+    orbital: string[];
+    atmospheric?: string[];
+  };
+  discovery: {
+    date: string;
+    discoverer: string;
+    method: string;
+    significance: string;
+  };
   properties: {
     size?: number;
     distance?: number;
     temperature?: number;
     mass?: number;
     orbitalPeriod?: number;
+    radius?: number;
+    density?: number;
+    gravity?: number;
+    escapeVelocity?: number;
   };
-  discoveryDate?: string;
-  discoverer?: string;
+  references: string[];
+  relatedObjects: string[];
   image?: string;
 }
 
@@ -24,27 +39,55 @@ const WikiPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedObject, setSelectedObject] = useState<CelestialObject | null>(null);
 
-  // Sample celestial objects database
+  // Comprehensive celestial objects database
   const celestialObjects: CelestialObject[] = [
     {
       id: '1',
       name: 'Kepler-452b',
       type: 'planet',
-      description: 'Kepler-452b is an exoplanet orbiting the Sun-like star Kepler-452 about 1,402 light-years from Earth in the constellation Cygnus.',
-      facts: [
-        'First near-Earth-size planet discovered in the habitable zone of a G2-type star',
-        'Orbits its star every 385 days',
-        'About 60% larger than Earth',
-        'Located in the "Goldilocks zone" where liquid water could exist'
-      ],
+      description: 'Kepler-452b is a super-Earth exoplanet orbiting within the inner edge of the habitable zone of the Sun-like star Kepler-452, and is the first planet with a near-Earth-size orbit in the habitable zone of a G2-type star.',
+      overview: 'Kepler-452b is located about 1,402 light-years from Earth in the constellation Cygnus. It was discovered by NASA\'s Kepler Space Telescope and is the first near-Earth-size planet discovered in the habitable zone of a G2-type star, making it a prime candidate for the search for extraterrestrial life.',
+      characteristics: {
+        physical: [
+          'Radius approximately 1.6 times that of Earth',
+          'Mass estimated at 5 Earth masses',
+          'Density similar to Earth, suggesting a rocky composition',
+          'Surface gravity about 2.5 times Earth\'s gravity'
+        ],
+        orbital: [
+          'Orbital period of 385 days (5% longer than Earth\'s year)',
+          'Semi-major axis of 1.046 AU from its star',
+          'Eccentricity of 0.0 (nearly circular orbit)',
+          'Receives 10% more stellar flux than Earth'
+        ],
+        atmospheric: [
+          'May have a thick atmosphere due to higher surface gravity',
+          'Potential for water vapor and other greenhouse gases',
+          'Atmospheric composition unknown but could support life'
+        ]
+      },
+      discovery: {
+        date: '2015-07-23',
+        discoverer: 'Kepler Science Team',
+        method: 'Transit photometry',
+        significance: 'First Earth-size planet in the habitable zone of a Sun-like star'
+      },
       properties: {
         size: 1.6,
         distance: 1402,
         temperature: 265,
-        orbitalPeriod: 385
+        mass: 5.0,
+        orbitalPeriod: 385,
+        radius: 1.6,
+        density: 5.5,
+        gravity: 2.5
       },
-      discoveryDate: '2015-07-23',
-      discoverer: 'Kepler Space Telescope'
+      references: [
+        'Jenkins, J. M., et al. (2015). "Discovery and Validation of Kepler-452b: A 1.6 R⊕ Super Earth Exoplanet in the Habitable Zone of a G2 Star." The Astronomical Journal.',
+        'NASA Exoplanet Archive. "Kepler-452 b."',
+        'Torres, G., et al. (2015). "Validation of Twelve Small Kepler Transiting Planets in the Habitable Zone." The Astrophysical Journal.'
+      ],
+      relatedObjects: ['Kepler-452', 'Kepler-452c', 'Kepler-186f']
     },
     {
       id: '2',
