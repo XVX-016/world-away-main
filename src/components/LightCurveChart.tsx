@@ -1,6 +1,6 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { LightCurveData } from './DemoSection';
+import { LightCurveData } from '../utils/exoplanetDetector';
 
 interface LightCurveChartProps {
   data: LightCurveData[];

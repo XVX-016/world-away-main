@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Upload, File, AlertCircle } from 'lucide-react';
 import Papa from 'papaparse';
-import { LightCurveData } from './DemoSection';
+import { LightCurveData } from '../utils/exoplanetDetector';
 
 interface FileUploadProps {
   onDataLoad: (data: LightCurveData[]) => void;

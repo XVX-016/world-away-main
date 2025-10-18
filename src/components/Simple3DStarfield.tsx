@@ -11,6 +11,9 @@ const Simple3DStarfield: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let mouseX = 0;
+    let mouseY = 0;
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -19,8 +22,6 @@ const Simple3DStarfield: React.FC = () => {
     const initStars = () => {
       const stars = [];
       const starCount = 3000;
-      let mouseX = 0;
-      let mouseY = 0;
       
       for (let i = 0; i < starCount; i++) {
         stars.push({
@@ -75,11 +76,8 @@ const Simple3DStarfield: React.FC = () => {
     initStars();
 
     const onMouseMove = (e: MouseEvent) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      // store on the canvas element for access in animate closure
-      (canvas as any)._mouseX = e.clientX;
-      (canvas as any)._mouseY = e.clientY;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
     const handleResize = () => {

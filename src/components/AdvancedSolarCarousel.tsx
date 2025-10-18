@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 // controls removed
 import Simple3DStarfield from './Simple3DStarfield';
-import SimpleSolarSystem3D from './SimpleSolarSystem3D';
+// solar system removed
 
 
 export const AdvancedSolarCarousel: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // state not needed after removing solar system
   // Auto-advance removed per UI cleanup; navigation via arrows only
 
   // navigation via page buttons only
@@ -19,13 +19,12 @@ export const AdvancedSolarCarousel: React.FC = () => {
         <Simple3DStarfield />
       </div>
 
-      {/* 3D Solar System Model (DOM-based) */}
-      <div className="absolute inset-0 w-full h-full">
-        <SimpleSolarSystem3D 
-          currentPlanet={currentIndex} 
-          onPlanetSelect={setCurrentIndex} 
-        />
+      {/* Centered mount for spaceship */}
+      <div className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
+        <div id="spaceship-mount" className="pointer-events-auto w-[50vw] max-w-[800px] h-[50vh] max-h-[600px]"></div>
       </div>
+
+      {/* Solar system removed */}
 
       {/* Controls removed per request; navigation via section page buttons */}
     </div>
