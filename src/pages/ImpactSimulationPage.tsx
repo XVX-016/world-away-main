@@ -363,15 +363,16 @@ const ImpactSimulationPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Results */}
+            {/* Enhanced Results */}
             {results && (
               <div className="mt-6 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-6">
                   <AlertTriangle className="w-6 h-6 text-red-400" />
-                  <h3 className="text-xl font-semibold text-white">Impact Results</h3>
+                  <h3 className="text-xl font-semibold text-white">Impact Analysis Results</h3>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Primary Impact Metrics */}
                   <div className="space-y-4">
                     <div className="bg-white/5 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-2">
@@ -380,6 +381,11 @@ const ImpactSimulationPage: React.FC = () => {
                       </div>
                       <p className={`text-2xl font-bold ${getSeverityColor(results.energyReleased)}`}>
                         {results.energyReleased.toFixed(1)} MT
+                      </p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {results.energyReleased > 1000 ? 'Catastrophic' : 
+                         results.energyReleased > 100 ? 'Devastating' : 
+                         results.energyReleased > 10 ? 'Significant' : 'Minor'} impact
                       </p>
                     </div>
                     
@@ -391,6 +397,9 @@ const ImpactSimulationPage: React.FC = () => {
                       <p className="text-white text-xl font-bold">
                         {results.craterDiameter.toFixed(1)} km
                       </p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        Depth: {results.craterDepth.toFixed(1)} km
+                      </p>
                     </div>
                     
                     <div className="bg-white/5 rounded-lg p-4">
@@ -401,16 +410,63 @@ const ImpactSimulationPage: React.FC = () => {
                       <p className="text-white text-xl font-bold">
                         {results.earthquakeMagnitude.toFixed(1)}
                       </p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {results.earthquakeMagnitude > 8 ? 'Mega-earthquake' :
+                         results.earthquakeMagnitude > 7 ? 'Major earthquake' :
+                         results.earthquakeMagnitude > 6 ? 'Strong earthquake' : 'Moderate earthquake'}
+                      </p>
                     </div>
                   </div>
                   
+                  {/* Secondary Effects */}
+                  <div className="space-y-4">
+                    <div className="bg-white/5 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Zap className="w-4 h-4 text-orange-400" />
+                        <span className="text-gray-300 text-sm">Fireball Radius</span>
+                      </div>
+                      <p className="text-white text-xl font-bold">
+                        {results.fireballRadius.toFixed(1)} km
+                      </p>
+                    </div>
+                    
+                    <div className="bg-white/5 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Target className="w-4 h-4 text-purple-400" />
+                        <span className="text-gray-300 text-sm">Shockwave Radius</span>
+                      </div>
+                      <p className="text-white text-xl font-bold">
+                        {results.shockwaveRadius.toFixed(1)} km
+                      </p>
+                    </div>
+                    
+                    {results.tsunamiHeight > 0 && (
+                      <div className="bg-white/5 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <AlertTriangle className="w-4 h-4 text-blue-400" />
+                          <span className="text-gray-300 text-sm">Tsunami Height</span>
+                        </div>
+                        <p className="text-white text-xl font-bold">
+                          {results.tsunamiHeight.toFixed(1)} m
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Environmental Effects */}
                   <div className="space-y-4">
                     {results.atmosphericEffects.length > 0 && (
                       <div className="bg-white/5 rounded-lg p-4">
-                        <h4 className="text-white font-semibold mb-2">Atmospheric Effects</h4>
-                        <ul className="space-y-1">
+                        <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                          <Zap className="w-4 h-4 text-red-400" />
+                          Atmospheric Effects
+                        </h4>
+                        <ul className="space-y-2">
                           {results.atmosphericEffects.map((effect, index) => (
-                            <li key={index} className="text-red-300 text-sm">• {effect}</li>
+                            <li key={index} className="flex items-start gap-2 text-gray-300 text-sm">
+                              <span className="w-2 h-2 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                              <span>{effect}</span>
+                            </li>
                           ))}
                         </ul>
                       </div>
@@ -418,14 +474,41 @@ const ImpactSimulationPage: React.FC = () => {
                     
                     {results.globalConsequences.length > 0 && (
                       <div className="bg-white/5 rounded-lg p-4">
-                        <h4 className="text-white font-semibold mb-2">Global Consequences</h4>
-                        <ul className="space-y-1">
+                        <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-orange-400" />
+                          Global Consequences
+                        </h4>
+                        <ul className="space-y-2">
                           {results.globalConsequences.map((consequence, index) => (
-                            <li key={index} className="text-orange-300 text-sm">• {consequence}</li>
+                            <li key={index} className="flex items-start gap-2 text-gray-300 text-sm">
+                              <span className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></span>
+                              <span>{consequence}</span>
+                            </li>
                           ))}
                         </ul>
                       </div>
                     )}
+                  </div>
+                </div>
+                
+                {/* Impact Comparison */}
+                <div className="mt-6 bg-white/5 rounded-lg p-4">
+                  <h4 className="text-white font-semibold mb-3">Impact Comparison</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div className="text-center">
+                      <div className="text-gray-400">Tunguska Event (1908)</div>
+                      <div className="text-white font-semibold">3-5 MT</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-gray-400">Chicxulub Impact (K-Pg)</div>
+                      <div className="text-white font-semibold">~100,000 MT</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-gray-400">Your Impact</div>
+                      <div className={`font-semibold ${getSeverityColor(results.energyReleased)}`}>
+                        {results.energyReleased.toFixed(1)} MT
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
