@@ -53,8 +53,12 @@ export const DemoSection: React.FC = () => {
         );
         
         if (newExoplanet) {
+          // Add to database immediately
           addExoplanet(newExoplanet);
           setNewPlanetDiscovered(true);
+          
+          // Show success notification
+          console.log('New exoplanet discovered and saved to database:', newExoplanet);
         }
       }
     } catch (error) {
