@@ -38,7 +38,7 @@ const ImpactSimulationPage: React.FC = () => {
   const [simulationHistory, setSimulationHistory] = useState<ImpactResults[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Realistic impact simulation based on physics
+  // Enhanced impact simulation with improved physics
   const calculateImpact = (params: SimulationParameters): ImpactResults => {
     const { asteroidSize, asteroidVelocity, asteroidDensity, impactAngle, targetType, targetDensity } = params;
     
@@ -48,47 +48,51 @@ const ImpactSimulationPage: React.FC = () => {
     const density = asteroidDensity; // kg/m³
     const angle = (impactAngle * Math.PI) / 180; // rad
     
-    // Calculate asteroid mass
+    // Calculate asteroid mass and volume
     const volume = (4/3) * Math.PI * Math.pow(radius, 3);
     const mass = volume * density;
     
-    // Calculate kinetic energy
-    const kineticEnergy = 0.5 * mass * Math.pow(velocity, 2);
+    // Calculate kinetic energy with angle consideration
+    const kineticEnergy = 0.5 * mass * Math.pow(velocity * Math.sin(angle), 2);
     const energyMegatons = kineticEnergy / (4.184e15); // Convert to megatons TNT
     
-    // Calculate crater dimensions (simplified scaling laws)
-    const craterDiameter = 2 * Math.pow(energyMegatons, 0.294) * 0.1; // km
-    const craterDepth = craterDiameter * 0.2; // km
+    // Enhanced crater calculations using scaling laws
+    const craterDiameter = 1.8 * Math.pow(energyMegatons, 0.294) * Math.pow(radius/1000, 0.4); // km
+    const craterDepth = craterDiameter * 0.15; // km (more realistic ratio)
     
-    // Calculate fireball radius
-    const fireballRadius = Math.pow(energyMegatons, 0.4) * 0.1; // km
+    // Fireball radius with improved scaling
+    const fireballRadius = 0.8 * Math.pow(energyMegatons, 0.4) * Math.pow(velocity/1000, 0.2); // km
     
-    // Calculate shockwave radius
-    const shockwaveRadius = Math.pow(energyMegatons, 0.33) * 0.5; // km
+    // Shockwave radius with atmospheric considerations
+    const shockwaveRadius = 1.2 * Math.pow(energyMegatons, 0.33) * Math.pow(velocity/1000, 0.1); // km
     
-    // Calculate earthquake magnitude
-    const earthquakeMagnitude = 0.67 * Math.log10(energyMegatons) + 4.0;
+    // Enhanced earthquake magnitude calculation
+    const earthquakeMagnitude = 0.67 * Math.log10(energyMegatons) + 4.0 + (Math.sin(angle) - 0.5) * 0.5;
     
-    // Calculate tsunami height (for ocean impacts)
+    // Tsunami height with improved ocean impact modeling
     const tsunamiHeight = targetType === 'ocean' ? 
-      Math.pow(energyMegatons, 0.5) * 0.1 : 0; // m
+      Math.pow(energyMegatons, 0.5) * Math.pow(velocity/1000, 0.3) * 0.2 : 0; // m
     
-    // Calculate debris ejected
-    const debrisEjected = Math.pow(craterDiameter, 3) * 0.1; // km³
+    // Debris ejected with volume considerations
+    const debrisEjected = Math.pow(craterDiameter, 3) * 0.15 * (1 + Math.sin(angle)); // km³
     
-    // Determine atmospheric effects
+    // Enhanced atmospheric effects with thresholds
     const atmosphericEffects: string[] = [];
-    if (energyMegatons > 100) atmosphericEffects.push('Global firestorm');
-    if (energyMegatons > 1000) atmosphericEffects.push('Nuclear winter');
-    if (energyMegatons > 10000) atmosphericEffects.push('Mass extinction event');
-    if (energyMegatons > 100000) atmosphericEffects.push('Planetary devastation');
+    if (energyMegatons > 50) atmosphericEffects.push('Regional atmospheric heating');
+    if (energyMegatons > 200) atmosphericEffects.push('Global firestorm');
+    if (energyMegatons > 1000) atmosphericEffects.push('Nuclear winter conditions');
+    if (energyMegatons > 5000) atmosphericEffects.push('Mass extinction event');
+    if (energyMegatons > 50000) atmosphericEffects.push('Planetary devastation');
+    if (energyMegatons > 100000) atmosphericEffects.push('Crustal disruption');
     
-    // Determine global consequences
+    // Enhanced global consequences
     const globalConsequences: string[] = [];
-    if (energyMegatons > 10) globalConsequences.push('Regional devastation');
-    if (energyMegatons > 100) globalConsequences.push('Continental effects');
-    if (energyMegatons > 1000) globalConsequences.push('Global climate change');
-    if (energyMegatons > 10000) globalConsequences.push('Mass extinction');
+    if (energyMegatons > 5) globalConsequences.push('Local devastation');
+    if (energyMegatons > 20) globalConsequences.push('Regional effects');
+    if (energyMegatons > 100) globalConsequences.push('Continental-scale impact');
+    if (energyMegatons > 500) globalConsequences.push('Global climate disruption');
+    if (energyMegatons > 2000) globalConsequences.push('Mass extinction');
+    if (energyMegatons > 10000) globalConsequences.push('Planetary-scale catastrophe');
     
     return {
       craterDiameter,
