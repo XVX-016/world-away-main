@@ -1,11 +1,11 @@
 import React from 'react';
-import SpaceScene from './SpaceScene';
+import AdvancedSpaceScene from './AdvancedSpaceScene';
 
 export const AdvancedSolarCarousel: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Enhanced Space Scene with Black Hole and Spaceship */}
-      <SpaceScene />
+      {/* Advanced Space Scene with Shader-based Black Hole and Spaceship */}
+      <AdvancedSpaceScene />
     </div>
   );
 };
