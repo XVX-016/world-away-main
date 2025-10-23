@@ -76,24 +76,24 @@ export function HermesSpaceship({ scale = 0.1, position = [0, 0, 0] }: HermesSpa
     if (groupRef.current) {
       const time = clock.getElapsedTime();
       
-      // Orbital motion around black hole
-      const radius = 6;
-      groupRef.current.position.x = Math.cos(time * 0.3) * radius;
-      groupRef.current.position.z = Math.sin(time * 0.3) * radius;
-      groupRef.current.position.y = Math.sin(time * 0.1) * 0.5;
+      // Orbital motion around black hole - closer and more realistic
+      const radius = 3.5;
+      groupRef.current.position.x = Math.cos(time * 0.2) * radius;
+      groupRef.current.position.z = Math.sin(time * 0.2) * radius;
+      groupRef.current.position.y = Math.sin(time * 0.05) * 0.2;
       
       // Always face the black hole
       groupRef.current.lookAt(0, 0, 0);
       
       // Slight rotation for realism
-      groupRef.current.rotation.z += 0.01;
+      groupRef.current.rotation.z += 0.005;
       
       // Animate individual components
       meshRefs.current.forEach((mesh, index) => {
         if (mesh) {
           // Subtle component animations
-          mesh.rotation.y += 0.001 * (index % 3 + 1);
-          mesh.rotation.x += 0.0005 * (index % 2 + 1);
+          mesh.rotation.y += 0.0005 * (index % 3 + 1);
+          mesh.rotation.x += 0.0002 * (index % 2 + 1);
         }
       });
     }
@@ -114,17 +114,17 @@ export function SimpleSpaceship() {
     if (groupRef.current) {
       const time = clock.getElapsedTime();
       
-      // Orbital motion around black hole
-      const radius = 6;
-      groupRef.current.position.x = Math.cos(time * 0.3) * radius;
-      groupRef.current.position.z = Math.sin(time * 0.3) * radius;
-      groupRef.current.position.y = Math.sin(time * 0.1) * 0.5;
+      // Orbital motion around black hole - closer and more realistic
+      const radius = 3.5;
+      groupRef.current.position.x = Math.cos(time * 0.2) * radius;
+      groupRef.current.position.z = Math.sin(time * 0.2) * radius;
+      groupRef.current.position.y = Math.sin(time * 0.05) * 0.2;
       
       // Always face the black hole
       groupRef.current.lookAt(0, 0, 0);
       
       // Slight rotation for realism
-      groupRef.current.rotation.z += 0.01;
+      groupRef.current.rotation.z += 0.005;
     }
   });
 
