@@ -1,6 +1,5 @@
-import React, { useRef, useEffect, useMemo, Suspense } from 'react';
+import { useRef, useEffect, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Stars, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom, DepthOfField } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import gsap from 'gsap';
@@ -82,78 +81,102 @@ function DistantStars() {
   );
 }
 
-// ⚫ Realistic Black Hole
+// ⚫ Crisp Black Hole with Rim Colors
 function BlackHole() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const ringRef = useRef<THREE.Mesh>(null);
-  const innerRingRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const ringMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const innerRingMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const eventHorizonRef = useRef<THREE.Mesh>(null);
+  const rimRef = useRef<THREE.Mesh>(null);
+  const outerRimRef = useRef<THREE.Mesh>(null);
+  const lensingRef = useRef<THREE.Mesh>(null);
+  
+  const eventHorizonMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const rimMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const outerRimMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const lensingMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
     
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.001;
-      meshRef.current.rotation.x += 0.0005;
+    if (eventHorizonRef.current) {
+      eventHorizonRef.current.rotation.y += 0.001;
     }
     
-    if (ringRef.current) {
-      ringRef.current.rotation.y += 0.005;
+    if (rimRef.current) {
+      rimRef.current.rotation.y += 0.008;
     }
     
-    if (innerRingRef.current) {
-      innerRingRef.current.rotation.y += 0.008;
+    if (outerRimRef.current) {
+      outerRimRef.current.rotation.y += 0.005;
     }
     
-    if (materialRef.current) {
-      // Subtle color variation
-      materialRef.current.emissiveIntensity = 0.3 + Math.sin(time * 2) * 0.1;
+    if (lensingRef.current) {
+      lensingRef.current.rotation.y += 0.003;
     }
     
-    if (ringMaterialRef.current) {
-      // Animate ring opacity
-      ringMaterialRef.current.opacity = 0.4 + Math.sin(time * 1.5) * 0.1;
+    // Animate rim colors
+    if (rimMaterialRef.current) {
+      const hue = (time * 0.3) % 1;
+      rimMaterialRef.current.color.setHSL(hue, 0.9, 0.6);
+      rimMaterialRef.current.opacity = 0.8 + Math.sin(time * 2) * 0.2;
+    }
+    
+    if (outerRimMaterialRef.current) {
+      const hue = (time * 0.2) % 1;
+      outerRimMaterialRef.current.color.setHSL(hue, 0.7, 0.5);
+      outerRimMaterialRef.current.opacity = 0.6 + Math.sin(time * 1.5) * 0.2;
+    }
+    
+    if (lensingMaterialRef.current) {
+      lensingMaterialRef.current.opacity = 0.3 + Math.sin(time * 1) * 0.1;
     }
   });
 
   return (
     <group>
-      {/* Main black hole sphere - smaller and more realistic */}
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[0.8, 64, 64]} />
-        <meshStandardMaterial
-          ref={materialRef}
+      {/* Event Horizon - Pure Black Sphere */}
+      <mesh ref={eventHorizonRef}>
+        <sphereGeometry args={[0.6, 64, 64]} />
+        <meshBasicMaterial
+          ref={eventHorizonMaterialRef}
           color="#000000"
-          emissive="#001122"
-          metalness={1}
-          roughness={0.05}
-          emissiveIntensity={0.3}
         />
       </mesh>
       
-      {/* Outer accretion disk */}
-      <mesh ref={ringRef}>
-        <torusGeometry args={[1.8, 0.2, 32, 128]} />
+      {/* Inner Rim - Bright Hot Colors */}
+      <mesh ref={rimRef}>
+        <torusGeometry args={[0.8, 0.15, 32, 128]} />
         <meshBasicMaterial
-          ref={ringMaterialRef}
-          color="#ffaa44"
+          ref={rimMaterialRef}
+          color="#ff0080"
           transparent
-          opacity={0.4}
+          opacity={0.8}
           side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
       
-      {/* Inner hot ring */}
-      <mesh ref={innerRingRef}>
-        <torusGeometry args={[1.2, 0.1, 16, 64]} />
+      {/* Outer Rim - Cooler Colors */}
+      <mesh ref={outerRimRef}>
+        <torusGeometry args={[1.2, 0.1, 32, 128]} />
         <meshBasicMaterial
-          ref={innerRingMaterialRef}
-          color="#ffffff"
+          ref={outerRimMaterialRef}
+          color="#0080ff"
           transparent
           opacity={0.6}
           side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
+      {/* Gravitational Lensing Effect */}
+      <mesh ref={lensingRef}>
+        <torusGeometry args={[1.5, 0.05, 16, 64]} />
+        <meshBasicMaterial
+          ref={lensingMaterialRef}
+          color="#ffffff"
+          transparent
+          opacity={0.3}
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
     </group>
@@ -174,21 +197,21 @@ function CameraController() {
   const { camera } = useThree();
   
   useEffect(() => {
-    // Smooth camera movement - closer to the action
+    // Position camera to match the image perspective
     gsap.to(camera.position, {
       x: 0,
-      y: 1,
-      z: 5,
-      duration: 4,
+      y: 0.5,
+      z: 4,
+      duration: 5,
       ease: "power2.inOut",
       repeat: -1,
       yoyo: true,
     });
     
-    // Camera look at animation
+    // Camera look at animation - focus on black hole
     gsap.to(camera, {
       lookAt: { x: 0, y: 0, z: 0 },
-      duration: 3,
+      duration: 4,
       ease: "power2.inOut",
       repeat: -1,
       yoyo: true,
@@ -203,7 +226,7 @@ export default function SpaceScene() {
   return (
     <div className="fixed inset-0 -z-10">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 50 }}
+        camera={{ position: [0, 0.5, 4], fov: 60 }}
         gl={{ antialias: true, alpha: true }}
       >
         {/* Background */}
@@ -224,14 +247,14 @@ export default function SpaceScene() {
         {/* Post-processing Effects */}
         <EffectComposer>
           <Bloom
-            intensity={0.8}
-            luminanceThreshold={0.2}
-            luminanceSmoothing={0.9}
+            intensity={1.5}
+            luminanceThreshold={0.1}
+            luminanceSmoothing={0.8}
           />
           <DepthOfField
             focusDistance={0}
-            focalLength={0.05}
-            bokehScale={1.5}
+            focalLength={0.03}
+            bokehScale={2}
           />
         </EffectComposer>
         

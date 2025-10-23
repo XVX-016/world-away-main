@@ -76,24 +76,25 @@ export function HermesSpaceship({ scale = 0.1, position = [0, 0, 0] }: HermesSpa
     if (groupRef.current) {
       const time = clock.getElapsedTime();
       
-      // Orbital motion around black hole - closer and more realistic
-      const radius = 3.5;
-      groupRef.current.position.x = Math.cos(time * 0.2) * radius;
-      groupRef.current.position.z = Math.sin(time * 0.2) * radius;
-      groupRef.current.position.y = Math.sin(time * 0.05) * 0.2;
+      // Position in bottom right area like in the image
+      const radius = 4.5;
+      const angle = time * 0.15 + Math.PI * 0.25; // Start in bottom right
+      groupRef.current.position.x = Math.cos(angle) * radius;
+      groupRef.current.position.z = Math.sin(angle) * radius;
+      groupRef.current.position.y = -1.5 + Math.sin(time * 0.1) * 0.3; // Lower position
       
       // Always face the black hole
       groupRef.current.lookAt(0, 0, 0);
       
       // Slight rotation for realism
-      groupRef.current.rotation.z += 0.005;
+      groupRef.current.rotation.z += 0.003;
       
       // Animate individual components
       meshRefs.current.forEach((mesh, index) => {
         if (mesh) {
           // Subtle component animations
-          mesh.rotation.y += 0.0005 * (index % 3 + 1);
-          mesh.rotation.x += 0.0002 * (index % 2 + 1);
+          mesh.rotation.y += 0.0003 * (index % 3 + 1);
+          mesh.rotation.x += 0.0001 * (index % 2 + 1);
         }
       });
     }
@@ -114,17 +115,18 @@ export function SimpleSpaceship() {
     if (groupRef.current) {
       const time = clock.getElapsedTime();
       
-      // Orbital motion around black hole - closer and more realistic
-      const radius = 3.5;
-      groupRef.current.position.x = Math.cos(time * 0.2) * radius;
-      groupRef.current.position.z = Math.sin(time * 0.2) * radius;
-      groupRef.current.position.y = Math.sin(time * 0.05) * 0.2;
+      // Position in bottom right area like in the image
+      const radius = 4.5;
+      const angle = time * 0.15 + Math.PI * 0.25; // Start in bottom right
+      groupRef.current.position.x = Math.cos(angle) * radius;
+      groupRef.current.position.z = Math.sin(angle) * radius;
+      groupRef.current.position.y = -1.5 + Math.sin(time * 0.1) * 0.3; // Lower position
       
       // Always face the black hole
       groupRef.current.lookAt(0, 0, 0);
       
       // Slight rotation for realism
-      groupRef.current.rotation.z += 0.005;
+      groupRef.current.rotation.z += 0.003;
     }
   });
 
@@ -158,10 +160,33 @@ export function SimpleSpaceship() {
         <meshStandardMaterial color="#ffd700" metalness={0.5} roughness={0.5} />
       </mesh>
       
-      {/* Ion drive */}
+      {/* Ion drive with dramatic glow */}
       <mesh position={[0, 0, -1.2]}>
         <cylinderGeometry args={[0.15, 0.1, 0.3, 8]} />
         <meshStandardMaterial color="#00ff88" emissive="#00ff00" emissiveIntensity={0.3} />
+      </mesh>
+      
+      {/* Engine glow effect */}
+      <mesh position={[0, 0, -1.5]}>
+        <sphereGeometry args={[0.2, 16, 16]} />
+        <meshBasicMaterial 
+          color="#ff4400" 
+          transparent 
+          opacity={0.6}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
+      {/* Engine trail */}
+      <mesh position={[0, 0, -2]}>
+        <coneGeometry args={[0.3, 0.8, 8]} />
+        <meshBasicMaterial 
+          color="#ff6600" 
+          transparent 
+          opacity={0.4}
+          side={THREE.DoubleSide}
+          blending={THREE.AdditiveBlending}
+        />
       </mesh>
     </group>
   );
