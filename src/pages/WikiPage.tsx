@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Star, Globe, Zap, Target, TrendingUp, BookOpen, Info } from 'lucide-react';
+import { AdvancedSolarCarousel } from '../components/AdvancedSolarCarousel';
 
 interface CelestialObject {
   id: string;
@@ -220,9 +221,12 @@ const WikiPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white">
+    <div className="min-h-screen text-white">
+      {/* Background */}
+      <AdvancedSolarCarousel />
+      
       {/* Header */}
-      <div className="bg-black/20 backdrop-blur-lg border-b border-white/10">
+      <div className="relative z-20 bg-black/20 backdrop-blur-lg border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center gap-3 mb-6">
             <BookOpen className="w-8 h-8 text-blue-400" />
@@ -265,7 +269,7 @@ const WikiPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="relative z-20 max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Object List */}
           <div className="lg:col-span-2">

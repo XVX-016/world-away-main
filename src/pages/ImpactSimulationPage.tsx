@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Settings, Target, Zap, AlertTriangle, BarChart3 } from 'lucide-react';
+import { AdvancedSolarCarousel } from '../components/AdvancedSolarCarousel';
 
 interface SimulationParameters {
   asteroidSize: number; // km
@@ -213,9 +214,12 @@ const ImpactSimulationPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-orange-900 text-white">
+    <div className="min-h-screen text-white">
+      {/* Background */}
+      <AdvancedSolarCarousel />
+      
       {/* Header */}
-      <div className="bg-black/20 backdrop-blur-lg border-b border-white/10">
+      <div className="relative z-20 bg-black/20 backdrop-blur-lg border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center gap-3 mb-6">
             <Target className="w-8 h-8 text-red-400" />
@@ -227,7 +231,7 @@ const ImpactSimulationPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="relative z-20 max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Simulation Controls */}
           <div className="lg:col-span-1 space-y-6">
